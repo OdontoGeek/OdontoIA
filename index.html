@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F6F3EC">
+<title>OdontoIA — OdontoGeek Educação</title>
+<meta name="description" content="OdontoIA — uso otimizado de inteligência artificial e LLM no dia-a-dia do dentista. Aula e mentoria por OdontoGeek Educação.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="OdontoIA — OdontoGeek Educação">
+<meta property="og:description" content="Uso otimizado de IA na clínica e na vida. Aula e mentoria.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F6F3EC'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='34' font-style='italic' font-weight='300' fill='%239B7B3C' text-anchor='middle'%3EIA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F3EC;
+    --paper-2:#EFEBE2;
+    --paper-3:#E8E3D7;
+    --ink:#13130F;
+    --ink-soft:#3A3A33;
+    --mute:#7A7568;
+    --accent:#9B7B3C;
+    --accent-soft:#B89968;
+    --line:rgba(19,19,15,0.12);
+    --line-strong:rgba(19,19,15,0.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(155,123,60,0.10), transparent 60%),
+      radial-gradient(800px 500px at -10% 110%, rgba(19,19,15,0.06), transparent 60%),
+      var(--paper);
+    padding:40px 22px 56px;
+    overflow-x:hidden;
+  }
+  .grain{
+    pointer-events:none;position:fixed;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:.55;mix-blend-mode:multiply;z-index:1;
+  }
+  .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:2}
+
+  /* META */
+  .meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--mute);font-weight:500;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:48px;gap:12px}
+  .meta .brand{display:flex;align-items:center}
+  .meta .dot{display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:10px;animation:pulse 2.4s ease-in-out infinite}
+  .meta .ver{font-family:'Fraunces',serif;font-style:italic;letter-spacing:0;text-transform:none;font-size:13px;color:var(--mute);font-weight:300}
+
+  /* HERO */
+  .hero{margin-bottom:72px;min-height:280px}
+  .kicker{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:15px;color:var(--accent);letter-spacing:0.02em;margin-bottom:18px;display:block;opacity:0;transform:translateY(8px);transition:opacity .6s ease, transform .6s ease}
+  .kicker.in{opacity:1;transform:none}
+  h1.title{
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-size:clamp(48px,11vw,168px);
+    line-height:0.92;
+    letter-spacing:-0.04em;
+    color:var(--ink);
+    font-variation-settings:"opsz" 144;
+    min-height:0.92em;
+    display:flex;flex-wrap:wrap;align-items:baseline;
+  }
+  h1.title .typed{display:inline-block;white-space:pre}
+  h1.title .ia{font-style:italic;font-weight:300;color:var(--accent)}
+  .caret{
+    display:inline-block;width:0.06em;height:0.85em;
+    background:var(--accent);
+    margin-left:0.04em;transform:translateY(0.08em);
+    animation:blink 1s steps(2) infinite;
+  }
+  .caret.gone{display:none}
+  .sub{
+    margin-top:24px;
+    font-family:'Fraunces',serif;
+    font-weight:300;
+    font-size:clamp(20px,2.6vw,30px);
+    line-height:1.3;
+    color:var(--ink-soft);
+    max-width:760px;
+    letter-spacing:-0.01em;
+    min-height:1.3em;
+  }
+  .sub .typed-sub{display:inline}
+  .lead{
+    margin-top:30px;
+    max-width:580px;
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink-soft);
+    font-weight:400;
+    opacity:0;transform:translateY(8px);transition:opacity .8s ease, transform .8s ease;
+  }
+  .lead.in{opacity:1;transform:none}
+  .lead em{font-family:'Fraunces',serif;font-style:italic;font-weight:400;color:var(--ink);font-size:1.02em}
+
+  /* SECTION LABEL */
+  .seclabel{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--mute);font-weight:600;margin-bottom:22px;display:flex;align-items:center;gap:12px}
+  .seclabel::before{content:"";width:24px;height:1px;background:var(--accent)}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .8s ease, transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* PILLARS */
+  .pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:72px}
+  .pillar{background:var(--paper);padding:32px 24px 28px;position:relative;transition:background .4s ease}
+  .pillar:hover{background:var(--paper-2)}
+  .pillar .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:14px;color:var(--accent);margin-bottom:12px;display:block}
+  .pillar h3{font-family:'Fraunces',serif;font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-0.015em;margin-bottom:8px;color:var(--ink)}
+  .pillar p{font-size:13.5px;line-height:1.55;color:var(--ink-soft);font-weight:400}
+  .pillar .tag{margin-top:14px;font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+  /* PROMPT DEMO */
+  .demo{
+    margin:0 0 72px;
+    border:1px solid var(--line-strong);
+    border-radius:18px;
+    background:linear-gradient(180deg, var(--paper-2) 0%, var(--paper) 100%);
+    padding:28px 24px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .demo::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(400px 200px at 100% 0%, rgba(155,123,60,0.10), transparent 70%);
+    pointer-events:none;
+  }
+  .demo .seclabel{margin-bottom:8px}
+  .demo h4{font-family:'Fraunces',serif;font-weight:400;font-size:22px;line-height:1.25;letter-spacing:-0.015em;color:var(--ink);margin-bottom:18px}
+  .demo h4 em{font-style:italic;color:var(--accent);font-weight:300}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .chip{
+    appearance:none;border:1px solid var(--line-strong);background:var(--paper);
+    border-radius:999px;padding:9px 14px;
+    font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:500;color:var(--ink-soft);
+    cursor:pointer;transition:all .25s ease;line-height:1;
+  }
+  .chip:hover,.chip:focus-visible{background:var(--ink);color:var(--paper);border-color:var(--ink);outline:none}
+  .chip.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+  .answer{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 18px;
+    min-height:96px;
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-size:16.5px;
+    line-height:1.5;
+    color:var(--ink);
+    letter-spacing:-0.005em;
+    position:relative;
+  }
+  .answer .placeholder{color:var(--mute);font-style:italic;font-weight:300}
+  .answer .stream-caret{
+    display:inline-block;width:0.5ch;height:1em;background:var(--accent);
+    transform:translateY(0.18em);margin-left:1px;
+    animation:blink 1s steps(2) infinite;
+  }
+
+  /* FUNIL */
+  .funil{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:72px}
+  .funil-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    padding:26px 22px;position:relative;transition:transform .3s ease, border-color .3s ease;
+  }
+  .funil-card:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+  .funil-card.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .funil-card .step{font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:600;color:var(--accent);margin-bottom:10px;display:block}
+  .funil-card.primary .step{color:var(--accent-soft)}
+  .funil-card h4{font-family:'Fraunces',serif;font-weight:500;font-size:24px;line-height:1.15;letter-spacing:-0.015em;margin-bottom:8px}
+  .funil-card p{font-size:13.5px;line-height:1.55;color:var(--ink-soft);font-weight:400}
+  .funil-card.primary p{color:rgba(246,243,236,0.78)}
+  .funil-card .meta-line{margin-top:16px;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);font-weight:500}
+  .funil-card.primary .meta-line{color:rgba(246,243,236,0.55)}
+
+  /* INFO ROW */
+  .info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:36px;margin-bottom:64px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+  .info .block .seclabel{margin-bottom:14px}
+  .info .block p{font-family:'Fraunces',serif;font-weight:400;font-size:17px;line-height:1.4;color:var(--ink);letter-spacing:-0.01em}
+  .info .block p span{color:var(--mute);font-style:italic;font-weight:300}
+
+  /* CTA */
+  .cta{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+  .signature{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);font-weight:500}
+  .signature .name{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink-soft);margin-right:8px}
+  .pill{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:18px 26px;border:1px solid var(--ink);border-radius:999px;
+    font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);font-weight:600;
+    background:transparent;cursor:pointer;transition:all .3s ease;
+    text-decoration:none;min-height:52px;
+    font-family:'Manrope',sans-serif;
+  }
+  .pill:hover,.pill:focus-visible{background:var(--ink);color:var(--paper);outline:none;transform:translateY(-1px)}
+  .pill .arr{font-family:'Fraunces',serif;font-style:italic;text-transform:none;letter-spacing:0;font-size:16px;font-weight:400}
+
+  /* FOOTER */
+  .foot{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mute);font-weight:500;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .foot em{font-family:'Fraunces',serif;font-style:italic;text-transform:none;letter-spacing:0;font-size:13px;font-weight:300}
+
+  /* RESPONSIVE */
+  @media (max-width: 720px){
+    body{padding:28px 18px 44px}
+    .meta{margin-bottom:36px;font-size:10px}
+    .hero{margin-bottom:56px}
+    .pillars{grid-template-columns:1fr;margin-bottom:56px}
+    .funil{grid-template-columns:1fr;margin-bottom:56px}
+    .info{grid-template-columns:1fr;gap:28px;padding-bottom:36px;margin-bottom:44px}
+    .demo{padding:24px 20px;margin-bottom:56px}
+  }
+
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal,.kicker,.lead{opacity:1 !important;transform:none !important;transition:none !important}
+    .caret,.meta .dot,.answer .stream-caret{animation:none}
+    .caret{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="wrap">
+
+  <div class="meta">
+    <span class="brand"><span class="dot"></span>OdontoGeek Educação</span>
+    <span class="ver">Ref. 2026-05</span>
+  </div>
+
+  <section class="hero">
+    <span class="kicker" id="kicker">— aula · mentoria · 2026</span>
+    <h1 class="title" aria-label="OdontoIA">
+      <span class="typed" id="t1"></span><span class="ia typed" id="t2"></span><span class="caret" id="caret"></span>
+    </h1>
+    <p class="sub"><span class="typed-sub" id="sub"></span></p>
+    <p class="lead" id="lead">
+      Em <em>dezembro de 2022</em> eu peguei o ChatGPT no primeiro dia. Há três anos e meio testando, errando e refinando — na clínica, no estudo, na vida. <em>Esta aula é o atalho:</em> o método que eu queria ter recebido pronto.
+    </p>
+  </section>
+
+  <div class="seclabel reveal">Quatro pilares</div>
+  <section class="pillars reveal">
+    <div class="pillar">
+      <span class="num">i.</span>
+      <h3>Mentalidade</h3>
+      <p>Pare de tentar. Comece a usar. A diferença entre quem brinca com IA e quem opera com IA.</p>
+      <div class="tag">Ponto de partida</div>
+    </div>
+    <div class="pillar">
+      <span class="num">ii.</span>
+      <h3>Vida pessoal</h3>
+      <p>Recupere horas por semana. Saúde, finanças, estudo, viagem, decisão. Casos reais, não promessa.</p>
+      <div class="tag">Ganho diário</div>
+    </div>
+    <div class="pillar">
+      <span class="num">iii.</span>
+      <h3>Vida profissional</h3>
+      <p>Onde o ROI aparece — estudo clínico, produção de conteúdo, marketing, gestão da clínica.</p>
+      <div class="tag">Onde o ROI aparece</div>
+    </div>
+    <div class="pillar">
+      <span class="num">iv.</span>
+      <h3>Riscos &amp; futuro</h3>
+      <p>LGPD, ética, alucinação, deepfake. Postura adulta para um terreno que ainda está se firmando.</p>
+      <div class="tag">Postura profissional</div>
+    </div>
+  </section>
+
+  <section class="demo reveal" aria-label="Demonstração interativa">
+    <div class="seclabel">Toque para experimentar</div>
+    <h4>Pergunte algo que você <em>gostaria</em> de saber sobre IA na clínica.</h4>
+    <div class="chips" role="group" aria-label="Perguntas sugeridas">
+      <button class="chip" data-q="0">Como começo sem perder tempo?</button>
+      <button class="chip" data-q="1">IA pode ajudar no diagnóstico?</button>
+      <button class="chip" data-q="2">E o marketing da clínica?</button>
+      <button class="chip" data-q="3">É seguro com dados de paciente?</button>
+    </div>
+    <div class="answer" id="answer" aria-live="polite">
+      <span class="placeholder">A resposta aparece aqui — em streaming, como na aula.</span>
+    </div>
+  </section>
+
+  <div class="seclabel reveal">Como funciona</div>
+  <section class="funil reveal">
+    <div class="funil-card">
+      <span class="step">01 · entrada</span>
+      <h4>A aula</h4>
+      <p>Aula única de 2h30, ou série de 4 encontros. Demonstrações ao vivo sobre casos reais que a comunidade trouxer.</p>
+      <div class="meta-line">Aberta à comunidade Care360</div>
+    </div>
+    <div class="funil-card primary">
+      <span class="step">02 · continuidade</span>
+      <h4>A mentoria</h4>
+      <p>OdontoGeek Educação — para quem quer parar de assistir e começar a implementar. Acompanhamento estruturado, mês a mês.</p>
+      <div class="meta-line">Programa contínuo</div>
+    </div>
+  </section>
+
+  <section class="info reveal">
+    <div class="block">
+      <div class="seclabel">Para quem</div>
+      <p>Dentistas e estudantes que querem usar IA <span>com método, não por tentativa.</span></p>
+    </div>
+    <div class="block">
+      <div class="seclabel">Formato</div>
+      <p>Aula única <span>(2h30)</span><br>ou série de 4 encontros.</p>
+    </div>
+    <div class="block">
+      <div class="seclabel">Entrega</div>
+      <p>Demonstrações ao vivo<br><span>com casos da comunidade.</span></p>
+    </div>
+  </section>
+
+  <section class="cta reveal">
+    <div class="signature">
+      <span class="name">Prof. Dr. Fabio Salomão</span>· OdontoGeek
+    </div>
+    <a class="pill" href="https://wa.me/5511950722201?text=Oi%20Fabio%2C%20vi%20sua%20proposta%20OdontoIA.%20Vamos%20conversar%20sobre%20o%20formato." target="_blank" rel="noopener" id="ctaBtn">
+      Vamos definir o formato <span class="arr">→</span>
+    </a>
+  </section>
+
+  <div class="foot">
+    <span>Ref. 2026-05 · OdontoGeek Educação</span>
+    <span><em>São Paulo · Brasil</em></span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Typed hero ----------
+  const t1 = document.getElementById('t1');
+  const t2 = document.getElementById('t2');
+  const sub = document.getElementById('sub');
+  const caret = document.getElementById('caret');
+  const kicker = document.getElementById('kicker');
+  const lead = document.getElementById('lead');
+
+  const SUB_TEXT = 'Três anos e meio descobrindo IA na clínica e na vida. Em uma aula, você pula a curva.';
+
+  function type(el, text, speed, jitter){
+    return new Promise(resolve=>{
+      let i=0;
+      function step(){
+        if(i>=text.length){ resolve(); return; }
+        el.textContent += text[i++];
+        const ch = text[i-1];
+        let d = speed + (Math.random()*jitter);
+        if(ch===' ') d *= 0.6;
+        if(ch==='.'||ch===','||ch==='—') d += 180;
+        setTimeout(step, d);
+      }
+      step();
+    });
+  }
+
+  async function runHero(){
+    if(reduce){
+      t1.textContent='Odonto'; t2.textContent='IA'; sub.textContent=SUB_TEXT;
+      kicker.classList.add('in'); lead.classList.add('in');
+      caret.classList.add('gone');
+      return;
+    }
+    kicker.classList.add('in');
+    await new Promise(r=>setTimeout(r,250));
+    await type(t1,'Odonto',55,40);
+    await new Promise(r=>setTimeout(r,180));
+    await type(t2,'IA',90,40);
+    caret.classList.add('gone');
+    await new Promise(r=>setTimeout(r,260));
+    await type(sub,SUB_TEXT,22,18);
+    await new Promise(r=>setTimeout(r,160));
+    lead.classList.add('in');
+  }
+  runHero();
+
+  // ---------- Reveal on scroll ----------
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{rootMargin:'0px 0px -8% 0px',threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // ---------- Prompt demo ----------
+  const ANSWERS = [
+    'Comece pelo que dói. Escolha UMA tarefa repetitiva da semana — anamnese, orçamento, post no Instagram — e use IA só nela por 7 dias. Mede tempo antes e depois. O resto vem por imitação do hábito, não por força de vontade.',
+    'Ajuda como copiloto, não como diagnosticador. Brilha em pré-leitura de imagem, organização de achados, hipóteses diferenciais e na escrita do laudo. A decisão é sua — sempre. O ganho é tirar o atrito do que vem antes e depois do exame.',
+    'Marketing odontológico com IA não é gerar 300 posts genéricos. É construir voz própria, repetir conceitos certos, e produzir em escala sem perder identidade. Conteúdo, roteiro de Reels, resposta de DM, anúncio — tudo orquestrado, não improvisado.',
+    'Com método, sim. Nunca cole prontuário cru em modelo público. Use anonimização, contas corporativas com retenção desligada, e separe o que é estudo do que é dado clínico. Na aula vemos o setup mínimo de LGPD para o consultório que não trava o trabalho.'
+  ];
+  const chips = document.querySelectorAll('.chip');
+  const answer = document.getElementById('answer');
+  let streamTimer = null;
+
+  function streamAnswer(text){
+    if(streamTimer){ clearInterval(streamTimer); streamTimer=null; }
+    answer.innerHTML = '<span class="stream-caret"></span>';
+    if(reduce){ answer.textContent = text; return; }
+    const words = text.split(' ');
+    let i=0;
+    const caretEl = '<span class="stream-caret"></span>';
+    streamTimer = setInterval(()=>{
+      if(i>=words.length){ clearInterval(streamTimer); streamTimer=null; answer.innerHTML = words.join(' '); return; }
+      i++;
+      answer.innerHTML = words.slice(0,i).join(' ')+' '+caretEl;
+    }, 55);
+  }
+
+  chips.forEach(c=>{
+    c.addEventListener('click',()=>{
+      chips.forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      const idx = parseInt(c.dataset.q,10);
+      streamAnswer(ANSWERS[idx]);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
