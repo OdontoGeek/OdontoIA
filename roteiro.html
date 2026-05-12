@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roteiro — OdontoIA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,300;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F3EC; --paper-2:#EFEBE2; --ink:#13130F; --ink-soft:#3A3A33;
+    --mute:#7A7568; --accent:#9B7B3C; --line:rgba(19,19,15,0.12); --line-strong:rgba(19,19,15,0.22);
+    --warn:#9B7B3C; --dirty:#B8651F;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+  body{padding:32px 20px 80px}
+  .wrap{max-width:860px;margin:0 auto}
+
+  header{position:sticky;top:0;background:var(--paper);padding:12px 0 14px;border-bottom:1px solid var(--line);margin-bottom:28px;z-index:10}
+  .titlebar{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-0.02em}
+  h1 em{font-style:italic;color:var(--accent);font-weight:300}
+  .status{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mute);font-weight:500}
+  .status .n{color:var(--ink);font-weight:600}
+  .status.dirty .n{color:var(--dirty)}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  button.btn{
+    appearance:none;border:1px solid var(--ink);background:transparent;color:var(--ink);
+    font:600 12px/1 'Manrope',sans-serif;letter-spacing:0.08em;text-transform:uppercase;
+    padding:11px 16px;border-radius:999px;cursor:pointer;transition:all .2s ease;
+  }
+  button.btn:hover{background:var(--ink);color:var(--paper)}
+  button.btn.ghost{border-color:var(--line-strong);color:var(--ink-soft)}
+  button.btn.ghost:hover{background:var(--ink-soft);color:var(--paper);border-color:var(--ink-soft)}
+  button.btn.ok{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+
+  .group{margin-top:28px}
+  .group > .label{
+    font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--mute);
+    font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px;
+  }
+  .group > .label::before{content:"";width:24px;height:1px;background:var(--accent)}
+
+  .card{
+    border:1px solid var(--line);border-radius:12px;background:var(--paper);
+    padding:14px 16px;margin-bottom:10px;transition:border-color .2s ease, background .2s ease;
+  }
+  .card.dirty{border-color:var(--accent);background:linear-gradient(0deg, rgba(155,123,60,0.04), transparent)}
+  .card .head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+  .card .id{
+    font:600 10.5px/1 'Manrope',sans-serif;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--mute);
+  }
+  .card.dirty .id{color:var(--accent)}
+  .card .meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--mute)}
+  .card .reset{
+    background:none;border:none;color:var(--mute);cursor:pointer;font:500 11px/1 'Manrope',sans-serif;
+    letter-spacing:0.04em;padding:4px 6px;border-radius:6px;
+  }
+  .card .reset:hover{color:var(--ink);background:var(--paper-2)}
+  .card .reset[hidden]{display:none}
+  textarea, input.short{
+    width:100%;border:none;background:transparent;resize:none;outline:none;
+    font:400 15px/1.55 'Manrope',sans-serif;color:var(--ink);
+    padding:4px 0 2px;letter-spacing:-0.005em;
+  }
+  textarea{min-height:1.55em;overflow:hidden}
+  input.short{font-size:15px}
+  .card .note{margin-top:6px;font-size:11px;color:var(--mute);font-style:italic}
+  .card .note code{font-family:ui-monospace,Menlo,monospace;font-style:normal;background:var(--paper-2);padding:1px 5px;border-radius:4px}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:999px;
+    font-size:13px;letter-spacing:0.04em;opacity:0;pointer-events:none;transition:all .25s ease;z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .help{margin-top:10px;font-size:12.5px;line-height:1.55;color:var(--mute)}
+  .help code{font-family:ui-monospace,Menlo,monospace;background:var(--paper-2);padding:1px 5px;border-radius:4px;font-size:12px}
+
+  @media (max-width:640px){
+    h1{font-size:22px}
+    body{padding:20px 14px 60px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="titlebar">
+    <h1>Roteiro <em>OdontoIA</em></h1>
+    <div class="status" id="status"><span class="n">0</span> de <span id="total">0</span> blocos alterados</div>
+  </div>
+  <div class="toolbar">
+    <button class="btn ok" id="copyDiff">Copiar diff</button>
+    <button class="btn ghost" id="copyAll">Copiar tudo</button>
+    <button class="btn ghost" id="resetAll">Resetar tudo</button>
+  </div>
+  <p class="help">Edite os blocos abaixo. As alterações ficam salvas no navegador (<code>localStorage</code>). <strong>Copiar diff</strong> põe no clipboard só o que mudou, em formato <code>- id: texto</code> — pronto para colar no chat.</p>
+</header>
+
+<main id="form"></main>
+
+</div>
+
+<div class="toast" id="toast">Copiado ✓</div>
+
+<script>
+// Cada bloco: [id, originalText, multiline?, note?]
+const GROUPS = [
+  { label: "Meta · topo", blocks: [
+    ["meta.brand", "OdontoGeek Educação", false],
+    ["meta.ver", "Ref. 2026-05", false],
+  ]},
+  { label: "Hero", blocks: [
+    ["hero.kicker", "— aula · mentoria · 2026", false],
+    ["hero.h1", "OdontoIA", false, "Renderizado com 'IA' em itálico dourado."],
+    ["hero.sub", "Três anos e meio descobrindo IA na clínica e na vida. Em uma aula, você pula a curva.", true],
+    ["hero.lead", "Em *dezembro de 2022* eu peguei o ChatGPT no primeiro dia. Há três anos e meio testando, errando e refinando — na clínica, no estudo, na vida. *Esta aula é o atalho:* o método que eu queria ter recebido pronto.", true, "Texto entre *asteriscos* fica em itálico/destaque."],
+  ]},
+  { label: "Quatro pilares", blocks: [
+    ["pillars.label", "Quatro pilares", false],
+    ["pillar.1.num", "i.", false],
+    ["pillar.1.title", "Mentalidade", false],
+    ["pillar.1.body", "Pare de tentar. Comece a usar. A diferença entre quem brinca com IA e quem opera com IA.", true],
+    ["pillar.1.tag", "Ponto de partida", false],
+    ["pillar.2.num", "ii.", false],
+    ["pillar.2.title", "Vida pessoal", false],
+    ["pillar.2.body", "Recupere horas por semana. Saúde, finanças, estudo, viagem, decisão. Casos reais, não promessa.", true],
+    ["pillar.2.tag", "Ganho diário", false],
+    ["pillar.3.num", "iii.", false],
+    ["pillar.3.title", "Vida profissional", false],
+    ["pillar.3.body", "Onde o ROI aparece — estudo clínico, produção de conteúdo, marketing, gestão da clínica.", true],
+    ["pillar.3.tag", "Onde o ROI aparece", false],
+    ["pillar.4.num", "iv.", false],
+    ["pillar.4.title", "Riscos & futuro", false],
+    ["pillar.4.body", "LGPD, ética, alucinação, deepfake. Postura adulta para um terreno que ainda está se firmando.", true],
+    ["pillar.4.tag", "Postura profissional", false],
+  ]},
+  { label: "Demo interativa", blocks: [
+    ["demo.label", "Toque para experimentar", false],
+    ["demo.h4", "Pergunte algo que você *gostaria* de saber sobre IA na clínica.", true, "Asteriscos = itálico dourado."],
+    ["demo.q.0", "Como começo sem perder tempo?", false],
+    ["demo.a.0", "Comece pelo que dói. Escolha UMA tarefa repetitiva da semana — anamnese, orçamento, post no Instagram — e use IA só nela por 7 dias. Mede tempo antes e depois. O resto vem por imitação do hábito, não por força de vontade.", true],
+    ["demo.q.1", "IA pode ajudar no diagnóstico?", false],
+    ["demo.a.1", "Ajuda como copiloto, não como diagnosticador. Brilha em pré-leitura de imagem, organização de achados, hipóteses diferenciais e na escrita do laudo. A decisão é sua — sempre. O ganho é tirar o atrito do que vem antes e depois do exame.", true],
+    ["demo.q.2", "E o marketing da clínica?", false],
+    ["demo.a.2", "Marketing odontológico com IA não é gerar 300 posts genéricos. É construir voz própria, repetir conceitos certos, e produzir em escala sem perder identidade. Conteúdo, roteiro de Reels, resposta de DM, anúncio — tudo orquestrado, não improvisado.", true],
+    ["demo.q.3", "É seguro com dados de paciente?", false],
+    ["demo.a.3", "Com método, sim. Nunca cole prontuário cru em modelo público. Use anonimização, contas corporativas com retenção desligada, e separe o que é estudo do que é dado clínico. Na aula vemos o setup mínimo de LGPD para o consultório que não trava o trabalho.", true],
+  ]},
+  { label: "Como funciona · funil", blocks: [
+    ["howitworks.label", "Como funciona", false],
+    ["funil.1.step", "01 · entrada", false],
+    ["funil.1.title", "A aula", false],
+    ["funil.1.body", "Aula única de 2h30, ou série de 4 encontros. Demonstrações ao vivo sobre casos reais que a comunidade trouxer.", true],
+    ["funil.1.meta", "Aberta à comunidade Care360", false],
+    ["funil.2.step", "02 · continuidade", false],
+    ["funil.2.title", "A mentoria", false],
+    ["funil.2.body", "OdontoGeek Educação — para quem quer parar de assistir e começar a implementar. Acompanhamento estruturado, mês a mês.", true],
+    ["funil.2.meta", "Programa contínuo", false],
+  ]},
+  { label: "Info · três blocos", blocks: [
+    ["info.1.label", "Para quem", false],
+    ["info.1.body", "Dentistas e estudantes que querem usar IA *com método, não por tentativa.*", true],
+    ["info.2.label", "Formato", false],
+    ["info.2.body", "Aula única *(2h30)* ou série de 4 encontros.", true],
+    ["info.3.label", "Entrega", false],
+    ["info.3.body", "Demonstrações ao vivo *com casos da comunidade.*", true],
+  ]},
+  { label: "CTA · rodapé", blocks: [
+    ["cta.signature.name", "Prof. Dr. Fabio Salomão", false],
+    ["cta.signature.role", "· OdontoGeek", false],
+    ["cta.pill", "Vamos definir o formato →", false],
+    ["foot.left", "Ref. 2026-05 · OdontoGeek Educação", false],
+    ["foot.right", "São Paulo · Brasil", false],
+  ]},
+];
+
+const ALL = GROUPS.flatMap(g => g.blocks);
+const ORIG = Object.fromEntries(ALL.map(b => [b[0], b[1]]));
+const KEY = id => "roteiro:" + id;
+
+const form = document.getElementById("form");
+const statusEl = document.getElementById("status");
+const totalEl = document.getElementById("total");
+totalEl.textContent = ALL.length;
+
+function autosize(t){
+  t.style.height = "auto";
+  t.style.height = t.scrollHeight + "px";
+}
+
+function currentValue(id){
+  const v = localStorage.getItem(KEY(id));
+  return v === null ? ORIG[id] : v;
+}
+
+function isDirty(id){
+  return currentValue(id) !== ORIG[id];
+}
+
+function refreshStatus(){
+  const n = ALL.filter(b => isDirty(b[0])).length;
+  statusEl.querySelector(".n").textContent = n;
+  statusEl.classList.toggle("dirty", n > 0);
+}
+
+function render(){
+  for (const g of GROUPS){
+    const sec = document.createElement("section");
+    sec.className = "group";
+    sec.innerHTML = `<div class="label">${g.label}</div>`;
+    for (const [id, orig, multi, note] of g.blocks){
+      const val = currentValue(id);
+      const card = document.createElement("div");
+      card.className = "card" + (val !== orig ? " dirty" : "");
+      card.dataset.id = id;
+
+      const field = multi
+        ? `<textarea data-id="${id}" aria-label="${id}" rows="1">${escapeHtml(val)}</textarea>`
+        : `<input class="short" type="text" data-id="${id}" aria-label="${id}" value="${escapeAttr(val)}">`;
+
+      card.innerHTML = `
+        <div class="head">
+          <span class="id">${id}</span>
+          <div class="meta">
+            <span class="count">${[...val].length} chars</span>
+            <button class="reset" type="button" ${val===orig?'hidden':''}>resetar</button>
+          </div>
+        </div>
+        ${field}
+        ${note ? `<div class="note">${note}</div>` : ''}
+      `;
+      sec.appendChild(card);
+    }
+    form.appendChild(sec);
+  }
+  // wire up
+  form.querySelectorAll("textarea").forEach(t => { autosize(t); });
+  form.addEventListener("input", onInput);
+  form.addEventListener("click", onClick);
+  refreshStatus();
+}
+
+function escapeHtml(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escapeAttr(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function onInput(e){
+  const el = e.target;
+  const id = el.dataset.id;
+  if (!id) return;
+  const val = el.value;
+  if (val === ORIG[id]) localStorage.removeItem(KEY(id));
+  else localStorage.setItem(KEY(id), val);
+  const card = el.closest(".card");
+  card.classList.toggle("dirty", val !== ORIG[id]);
+  card.querySelector(".count").textContent = [...val].length + " chars";
+  const reset = card.querySelector(".reset");
+  if (reset) reset.hidden = (val === ORIG[id]);
+  if (el.tagName === "TEXTAREA") autosize(el);
+  refreshStatus();
+}
+
+function onClick(e){
+  if (!e.target.classList.contains("reset")) return;
+  const card = e.target.closest(".card");
+  const id = card.dataset.id;
+  localStorage.removeItem(KEY(id));
+  const field = card.querySelector("textarea,input.short");
+  field.value = ORIG[id];
+  card.classList.remove("dirty");
+  card.querySelector(".count").textContent = [...ORIG[id]].length + " chars";
+  e.target.hidden = true;
+  if (field.tagName === "TEXTAREA") autosize(field);
+  refreshStatus();
+}
+
+function flatten(s){ return s.replace(/\s*\n\s*/g, " ").trim(); }
+
+function buildDiff(onlyChanged){
+  const lines = ["# Revisão roteiro"];
+  for (const [id, orig] of ALL.map(b => [b[0], b[1]])){
+    const v = currentValue(id);
+    if (onlyChanged && v === orig) continue;
+    lines.push(`- ${id}: ${flatten(v)}`);
+  }
+  return lines.join("\n");
+}
+
+async function copyText(text, msg){
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(msg);
+  } catch {
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); ta.remove();
+    toast(msg);
+  }
+}
+
+const toastEl = document.getElementById("toast");
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove("show"), 1600);
+}
+
+document.getElementById("copyDiff").addEventListener("click", () => {
+  const n = ALL.filter(b => isDirty(b[0])).length;
+  if (n === 0){ toast("Nada alterado ainda"); return; }
+  copyText(buildDiff(true), `Copiado ✓ (${n} bloco${n>1?'s':''})`);
+});
+document.getElementById("copyAll").addEventListener("click", () => {
+  copyText(buildDiff(false), `Copiado ✓ (roteiro completo)`);
+});
+document.getElementById("resetAll").addEventListener("click", () => {
+  if (!confirm("Resetar todas as edições?")) return;
+  for (const [id] of ALL) localStorage.removeItem(KEY(id));
+  form.innerHTML = "";
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
