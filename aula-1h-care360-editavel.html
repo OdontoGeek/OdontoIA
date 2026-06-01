@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roteiro Aula OdontoIA — 1h (editável)</title>
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #1c1c1a;
+    --muted: #6b6b66;
+    --accent: #8b4a1a;
+    --rule: #e2ddd2;
+    --panel: #f1ece1;
+    --refrao-bg: #fff6e3;
+    --refrao-border: #d9b97a;
+    --caution-bg: #fde9e2;
+    --caution-border: #d97a4a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14140f;
+      --fg: #e9e7df;
+      --muted: #99948a;
+      --accent: #f0c08a;
+      --rule: #2c2a23;
+      --panel: #1f1d17;
+      --refrao-bg: #2a2316;
+      --refrao-border: #8a6b32;
+      --caution-bg: #2c1c14;
+      --caution-border: #b25a2e;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+    padding: 32px 16px 96px;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  header.titlebar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+    margin-bottom: 28px;
+  }
+  header.titlebar h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header.titlebar .meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .toolbar {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 0;
+    margin: -16px 0 24px;
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .toolbar button {
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+  .toolbar .status { color: var(--muted); font-size: 12px; margin-left: auto; }
+  h2 {
+    font-size: 18px;
+    margin: 36px 0 8px;
+    letter-spacing: -0.01em;
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; }
+  h2 .janela { color: var(--muted); font-weight: 400; font-size: 14px; margin-left: 8px; }
+  h3 { font-size: 15px; margin: 22px 0 6px; }
+  p, li { margin: 6px 0; }
+  ul, ol { padding-left: 22px; }
+  blockquote {
+    margin: 12px 0;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+    color: var(--fg);
+    font-style: italic;
+  }
+  .refrao {
+    background: var(--refrao-bg);
+    border: 1px solid var(--refrao-border);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+  }
+  .refrao strong { display: block; font-style: normal; color: var(--accent); margin-bottom: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .caution {
+    background: var(--caution-bg);
+    border: 1px solid var(--caution-border);
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  table.toc {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 4px;
+    font-size: 14px;
+  }
+  table.toc th, table.toc td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.toc th { font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  table.toc td.num { color: var(--muted); width: 28px; }
+  table.toc td.min { color: var(--muted); width: 60px; }
+  table.toc td.win { color: var(--muted); width: 110px; font-variant-numeric: tabular-nums; }
+  [contenteditable="true"] { outline: none; }
+  [contenteditable="true"]:focus { background: rgba(139,74,26,0.05); border-radius: 4px; }
+  .fala-ancora { font-style: italic; color: var(--accent); }
+  .transicao {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .transicao::before { content: "↳ Transição "; color: var(--accent); font-weight: 600; font-style: normal; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 32px 0; }
+  footer { color: var(--muted); font-size: 12px; margin-top: 48px; text-align: center; }
+  @media (max-width: 600px) {
+    body { padding: 20px 12px 80px; }
+    h2 { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<div class="toolbar" contenteditable="false">
+  <button id="btn-copy">Copiar como Markdown</button>
+  <button id="btn-download">Baixar .md</button>
+  <button id="btn-download-html">Baixar .html (com edições)</button>
+  <button id="btn-print">Imprimir / PDF</button>
+  <button id="btn-reset" title="Descarta edições salvas neste navegador">Resetar</button>
+  <span class="status" id="status"></span>
+</div>
+
+<header class="titlebar" contenteditable="false">
+  <h1>Roteiro Aula OdontoIA — 1h expositiva (C.A.R.E. 360)</h1>
+  <span class="meta">2026-05-12 · derivado de v2 (2h30)</span>
+</header>
+
+<section id="doc" contenteditable="true">
+
+<p><em>Versão condensada e expositiva do roteiro v2 (2h30). Mesmo método, mesmo arco, mesmos refrões — em 60 minutos corridos, sem intervalo, com 1 demo ao vivo (alucinação) e 1 screencast (NotebookLM).</em></p>
+
+<p><strong>Formato:</strong> online ao vivo (Zoom/Meet). <strong>Público:</strong> dentistas da comunidade C.A.R.E. 360.</p>
+
+<div class="refrao">
+  <strong>Promessa-título</strong>
+  <em>"Em 1 hora, você sai com clareza de onde IA já paga conta na sua semana — e com um desafio de 7 dias para sair daqui fazendo, não só sabendo."</em>
+</div>
+
+<h2>Visão geral · 60 min</h2>
+
+<table class="toc">
+  <thead>
+    <tr><th>#</th><th>Bloco</th><th>Min</th><th>Janela</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="num">0</td><td>Abertura — promessa + contrato</td><td class="min">5</td><td class="win">0:00 → 0:05</td></tr>
+    <tr><td class="num">1</td><td>Mentalidade — pare de tentar, comece a usar</td><td class="min">5</td><td class="win">0:05 → 0:10</td></tr>
+    <tr><td class="num">2</td><td><strong>IA no dia a dia</strong> (4 frentes)</td><td class="min">18</td><td class="win">0:10 → 0:28</td></tr>
+    <tr><td class="num">3</td><td><strong>IA na odontologia</strong> (4 frentes, sintéticas)</td><td class="min">22</td><td class="win">0:28 → 0:50</td></tr>
+    <tr><td class="num">4</td><td>Riscos essenciais — LGPD + alucinação</td><td class="min">5</td><td class="win">0:50 → 0:55</td></tr>
+    <tr><td class="num">5</td><td>Desafio 7 dias + encerramento</td><td class="min">5</td><td class="win">0:55 → 1:00</td></tr>
+  </tbody>
+</table>
+
+<div class="refrao">
+  <strong>Refrões da aula</strong>
+  <ul>
+    <li><em>"Pare de tentar. Comece a usar."</em></li>
+    <li><em>"Copiloto, não diagnosticador."</em></li>
+    <li><em>"Método, não tentativa."</em></li>
+    <li><em>"Se eu não posso mostrar com dado fictício, não devia usar com dado real sem método."</em></li>
+  </ul>
+</div>
+
+<hr>
+
+<h2>Bloco 0 — Abertura <span class="janela">5 min · 0:00 → 0:05</span></h2>
+
+<p><strong>Objetivo.</strong> Comprar 60 minutos de atenção da turma C.A.R.E. 360. Aluno sai sabendo <em>por que esta aula existe</em> e <em>o que vai levar embora</em>.</p>
+
+<blockquote class="fala-ancora">"Em dezembro de 2022 eu peguei o ChatGPT no primeiro dia. Esta hora é o atalho condensado de três anos e meio testando, errando e refinando."</blockquote>
+
+<p><strong>Pontos de conteúdo.</strong></p>
+<ul>
+  <li>O que esta aula <strong>é:</strong> método para usar IA com intenção — na clínica e na vida.</li>
+  <li>O que esta aula <strong>não é:</strong> tutorial de ferramenta, hype, demonstração de truque.</li>
+  <li>Contrato com a turma: 4 blocos curtos, sem intervalo, perguntas no final.</li>
+  <li><strong>Promessa-título</strong> <em>(verbatim).</em> "Em 1 hora, você sai com clareza de onde IA já paga conta na sua semana — e com um desafio de 7 dias para sair daqui fazendo, não só sabendo."</li>
+  <li>Anúncio leve do desafio: <em>"no último bloco eu te dou um desafio simples de 7 dias com peça publicável."</em></li>
+</ul>
+
+<p class="transicao"><em>"Antes de mostrar onde IA paga conta, preciso falar do motivo pelo qual a maioria desiste."</em></p>
+
+<hr>
+
+<h2>Bloco 1 — Mentalidade <span class="janela">5 min · 0:05 → 0:10</span></h2>
+
+<p><strong>Objetivo.</strong> Instalar a postura de <em>operador</em> (não experimentador). Aluno sai sabendo que o problema dele com IA não é técnico — é de hábito.</p>
+
+<blockquote class="fala-ancora">"Pare de tentar. Comece a usar."</blockquote>
+
+<p><strong>Os 3 motivos típicos de desistência.</strong></p>
+<ol>
+  <li><strong>Tarefa errada.</strong> Pediu algo grande, vago e sem critério ("me ajude com marketing"). Saiu genérico, voltou a fazer no braço.</li>
+  <li><strong>Esperou mágica.</strong> Achou que era só clicar. Quando viu que precisava revisar, decidiu que "no braço sai mais rápido".</li>
+  <li><strong>Não mediu nada.</strong> Usou uma vez, achou interessante, esqueceu. Sem antes/depois, não há reforço — e o hábito morre.</li>
+</ol>
+
+<p><strong>Modelo mental.</strong> IA como <em>estagiário brilhante e esquecido</em> — precisa de instrução, contexto e revisão. Não de fé.</p>
+
+<p><strong>Método mínimo.</strong> Escolha <strong>uma</strong> tarefa repetitiva da semana e use IA <em>só</em> nela por 7 dias. Mede tempo antes/depois.</p>
+
+<p class="transicao"><em>"Antes de levar pro consultório, deixa eu mostrar onde IA já me devolveu horas fora do trabalho — porque é onde o risco é menor e o aprendizado é mais rápido."</em></p>
+
+<hr>
+
+<h2>Bloco 2 — IA no dia a dia <span class="janela">18 min · 0:10 → 0:28</span></h2>
+
+<p><strong>Objetivo.</strong> Mostrar ROI imediato e baixo-risco. Aluno sai com 4 frentes pessoais onde IA dá ganho hoje, sem nenhum medo de LGPD.</p>
+
+<blockquote class="fala-ancora">"Recupere horas por semana antes de tentar transformar a clínica."</blockquote>
+
+<h3>2.1 — Saúde · ~4 min</h3>
+<ul>
+  <li>Entender exame de rotina antes da consulta, preparar pergunta para o médico, comparar tratamento.</li>
+  <li>IA como <strong>nivelador de assimetria de informação</strong> — não substitui o profissional, te leva à consulta menos perdido.</li>
+  <li>Mini-exemplo verbal: chegar com 3 perguntas estruturadas em vez de "explica isso aqui pra mim".</li>
+</ul>
+
+<h3>2.2 — Finanças pessoais · ~4 min</h3>
+<ul>
+  <li>Categorização de gastos, comparação de cenário, planejamento.</li>
+  <li>Regra: <strong>hipóteses, não saldo real.</strong> Trabalha com valores ilustrativos.</li>
+  <li>Mini-exemplo: "se eu cortar X e realocar em Y, qual o impacto em 12 meses?"</li>
+</ul>
+
+<h3>2.3 — Estudo e leitura · ~4 min</h3>
+<ul>
+  <li>Resumo de livro, mapa de tema, tradução técnica fora da odonto.</li>
+  <li>IA como <strong>segunda passada de leitura</strong> — você ainda lê o original, mas chega nele com mapa.</li>
+  <li>Mini-exemplo: pedir um glossário das 10 palavras-chave antes de abrir o livro.</li>
+</ul>
+
+<h3>2.4 — Decisão difícil · ~4 min</h3>
+<ul>
+  <li>IA <strong>não decide</strong> — força você a estruturar prós, contras e perguntas que vinha evitando.</li>
+  <li>Mini-exemplo: "me faça 5 perguntas que eu ainda não me fiz sobre essa decisão".</li>
+</ul>
+
+<div class="caution">
+  <strong>Plantio LGPD</strong> <em>(1 frase no fim, antes da transição):</em> "A partir do próximo bloco eu mudo de chave: nada que vocês vão ver é caso real meu. E isso é proposital — já explico no Bloco 4."
+</div>
+
+<p class="transicao"><em>"Se IA já mexeu com o pessoal, agora a pergunta é onde ela paga conta dentro do consultório."</em></p>
+
+<hr>
+
+<h2>Bloco 3 — IA na odontologia <span class="janela">22 min · 0:28 → 0:50 · coração da aula</span></h2>
+
+<p><strong>Objetivo.</strong> Mostrar quatro frentes operacionais com ROI demonstrável, <strong>todas em cenário sintético</strong>, no mix 30% clínica / 70% negócio. Aluno entende que o ROI maior está fora da cadeira — e que isso é coerente com proteger o paciente.</p>
+
+<blockquote class="fala-ancora">"Onde o ROI aparece — e por que ele aparece mais rápido fora da cadeira do que dentro dela."</blockquote>
+
+<div class="caution">
+  <strong>Regra do bloco (declarada à turma):</strong> "Tudo o que vou mostrar agora é caso sintético criado para esta aula. Nenhum dado real do meu consultório, paciente ou pesquisa entra aqui. Esse é o padrão que eu quero que vocês adotem."
+</div>
+
+<h3>3.1 — Análise de faturamento e procedimentos · ~6 min  <em>(negócio)</em></h3>
+<ul>
+  <li>IA não substitui contador nem gestor — <strong>encurta o tempo entre dado bruto e pergunta certa</strong>.</li>
+  <li>O ganho não está em "calcular" (planilha já faz) — está em <em>fazer perguntas que você não fazia</em>.</li>
+  <li>Mini-cenário sintético: planilha fictícia com colunas <em>procedimento, valor, profissional, mês, convênio</em>.</li>
+  <li>Perguntas-âncora narradas: <em>quais procedimentos sustentam o faturamento? qual mês destoou e por quê? onde está a margem escondida?</em></li>
+</ul>
+
+<h3>3.2 — Organização de rotinas · ~6 min  <em>(negócio)</em></h3>
+<ul>
+  <li>O ganho não é "fazer mais" — é <em>parar de carregar tarefa-zumbi na cabeça</em>.</li>
+  <li>IA como <strong>camada de estrutura</strong>, não de execução: prioriza, agrupa, lembra, escreve o primeiro rascunho.</li>
+  <li>Humano sempre no loop nas mensagens que saem para paciente/equipe.</li>
+  <li>Mini-cenário sintético: agenda fictícia + tarefas administrativas + e-mails simulados.</li>
+  <li>Exemplos: priorização do dia, template de follow-up de orçamento, lembrete leve.</li>
+</ul>
+
+<h3>3.3 — Compreensão rápida de artigos · ~5 min  <em>(clínica)</em></h3>
+<ul>
+  <li>O ganho é <strong>nivelar o atrito de leitura técnica</strong> e <strong>reduzir a chance de esquecer pergunta crítica</strong> na anamnese.</li>
+  <li>Decisão clínica continua humana — sempre. IA prepara a pergunta, não responde por você.</li>
+  <li>Mini-cenário: artigo sintético/público lido em 5 min, extrair achados acionáveis + checklist genérico de "perguntas pré-consulta sobre histórico de saúde" com <strong>paciente fictício</strong>.</li>
+</ul>
+
+<h3>3.4 — Estudo de temas novos com NotebookLM · ~5 min  <em>(clínica/acadêmico)</em></h3>
+<ul>
+  <li>NotebookLM como <strong>segunda leitura supervisionada</strong>, não primeira. Você ainda precisa saber o que perguntar.</li>
+  <li>Diferença entre "resumo bonito" e "compreensão útil": cita fonte, permite ir ao trecho original, gera mapa do tema.</li>
+  <li>Limite honesto: o modelo só sabe o que você alimentou. Lixo entra, lixo sai.</li>
+  <li><strong>Apresentação por screencast pré-gravado de 60s</strong> — sem demo ao vivo nesta versão. Anunciar como tal: <em>"gravei antes pra não depender da rede de vocês — vão ver exatamente o mesmo fluxo."</em></li>
+</ul>
+
+<p class="transicao"><em>"Tudo isso parece ótimo até alguém colar o prontuário no chat. É pra lá que a gente vai agora — 5 minutos sobre o que não pode dar errado."</em></p>
+
+<hr>
+
+<h2>Bloco 4 — Riscos essenciais <span class="janela">5 min · 0:50 → 0:55</span></h2>
+
+<p><strong>Objetivo.</strong> Instalar postura adulta em 5 minutos. Aluno sai sabendo que existe um setup mínimo de uso responsável e que ele consegue implementar.</p>
+
+<blockquote class="fala-ancora">"Postura adulta para um terreno que ainda está se firmando."</blockquote>
+
+<h3>4.1 — LGPD prática · ~2 min</h3>
+<ul>
+  <li><strong>Nunca</strong> colar prontuário cru em modelo público.</li>
+  <li>Anonimização real antes de qualquer prompt clínico.</li>
+  <li>Conta corporativa com <strong>retenção desligada</strong> quando possível.</li>
+  <li>Separação clara entre estudo (modelo público) e dado clínico (anonimizado + conta corporativa).</li>
+</ul>
+
+<h3>4.2 — Alucinação · ~3 min</h3>
+<ul>
+  <li><strong>Demo ao vivo</strong> (única demo da aula, prompt já pronto na tela): pedir ao modelo <em>"cite 3 estudos com DOI sobre fluorescência em resinas compostas"</em>. Mostrar como ele tende a inventar autor + ano + DOI plausíveis com confiança alta.</li>
+  <li><strong>Regra dos 3 sinais</strong> de alucinação:
+    <ol>
+      <li>Citação muito específica (DOI, autor, ano) que você não pode verificar de cabeça.</li>
+      <li>Número exato sem fonte clara.</li>
+      <li>Confiança alta em domínio raro.</li>
+    </ol>
+  </li>
+  <li>Protocolo de 30s: ao receber output assim, abrir uma aba, conferir o DOI antes de citar.</li>
+</ul>
+
+<p class="transicao"><em>"Visto isso, sobra uma pergunta: como você sai daqui hoje fazendo diferente amanhã?"</em></p>
+
+<hr>
+
+<h2>Bloco 5 — Desafio + encerramento <span class="janela">5 min · 0:55 → 1:00</span></h2>
+
+<p><strong>Objetivo.</strong> Materializar a promessa-título. Aluno sai com <strong>uma peça publicável</strong> clara para produzir nos próximos 7 dias.</p>
+
+<blockquote class="fala-ancora">"Esta aula é o atalho. O desafio é o primeiro passo."</blockquote>
+
+<p><strong>Recap relâmpago dos 4 refrões</strong> <em>(15 segundos):</em> "Pare de tentar, comece a usar. Copiloto, não diagnosticador. Método, não tentativa. Se eu não posso mostrar com dado fictício, não devia usar com dado real sem método."</p>
+
+<p><strong>Releitura da promessa-título.</strong> <em>"Em 1 hora, você sai com clareza de onde IA já paga conta na sua semana — e com um desafio de 7 dias para sair daqui fazendo, não só sabendo."</em></p>
+
+<p><strong>Desafio "Sua primeira peça de OdontoIA" — escolha 1 dos 2 caminhos:</strong></p>
+<ul>
+  <li><strong>Caminho Pessoal — Foto profissional / capa de bio.</strong> Use IA pra gerar uma nova foto profissional ou capa de bio (Instagram, LinkedIn, WhatsApp Business). Mais simples. Resultado garantido.</li>
+  <li><strong>Caminho Profissional — Carrossel "Mitos e Verdades" da odonto.</strong> Use IA pra escrever copy de carrossel de 5–7 slides desfazendo mitos comuns (clareamento, canal, ortodontia, implante — você escolhe). Monta no Canva ou similar.</li>
+</ul>
+
+<p><strong>Regras (curtas, repetidas do Bloco 4).</strong></p>
+<ul>
+  <li>Foto: imagem sua ou totalmente sintética. <strong>Sem rosto de paciente.</strong></li>
+  <li>Carrossel: conhecimento técnico geral, <strong>sem caso clínico real</strong>.</li>
+</ul>
+
+<p><strong>Mecânica de menção.</strong> <em>"Não é exigência. Mas se ficar bom — e vai ficar — me marca em <code>@salomaofm.op</code> e usa <code>#OdontoGeek</code> <code>#OdontoIA</code>. Eu reposto os melhores."</em></p>
+
+<p><strong>Prazo.</strong> <em>"7 dias. Conta a partir de amanhã."</em></p>
+
+<p><strong>Frase única de funil</strong> <em>(sem bloco de mentoria dedicado):</em> "Quem quiser sair de uma peça publicada pra IA implementada no consultório com método, fala comigo no DM <code>@salomaofm.op</code>."</p>
+
+<div class="refrao">
+  <strong>Encerramento verbatim</strong>
+  <em>"Pare de tentar. Comece a usar. Amanhã."</em>
+</div>
+
+<hr>
+
+<h2>Princípios editoriais (herdados do v2)</h2>
+<ul>
+  <li><strong>Resultado, não conteúdo.</strong> Cada bloco vende o que o aluno <em>passa a fazer</em>.</li>
+  <li><strong>Refrões.</strong> Frases-âncora se repetem entre blocos.</li>
+  <li><strong>Bloco 3 = casos sintéticos sempre.</strong> Coerência com o refrão de LGPD do Bloco 4.</li>
+  <li><strong>Desafio = peça publicável, não exercício.</strong> Menção é convite, não barganha.</li>
+  <li><strong>Promessa-título no Bloco 0 e no Bloco 5.</strong> A aula precisa entregar literalmente o que prometeu na primeira frase.</li>
+</ul>
+
+<h2>Próximas etapas</h2>
+<ul>
+  <li>Cronometrar leitura em voz alta — confirmar que cabe em 60min com folga de 2–3min para Q&amp;A residual.</li>
+  <li>Gravar screencast de 60s do NotebookLM (substitui demo ao vivo do Bloco 3.4).</li>
+  <li>Deixar pronto na tela o prompt da demo de DOI inventado (Bloco 4.2).</li>
+  <li>Slide deck enxuto (≤25 slides) específico para esta versão de 1h.</li>
+  <li>Decidir se C.A.R.E. 360 hospeda gravação da aula no canal próprio.</li>
+</ul>
+
+</section>
+
+<footer contenteditable="false">
+  Edição livre nesta página · use os botões acima para exportar · derivado de <code>Roteiro Aula 2h30.md (v2)</code>
+</footer>
+
+</main>
+
+<script>
+(function(){
+  const $doc = document.getElementById('doc');
+  const $status = document.getElementById('status');
+  const STORAGE_KEY = 'aula-1h-care360-editavel:doc';
+  const ORIGINAL_HTML = $doc.innerHTML;
+
+  function flash(msg) {
+    $status.textContent = msg;
+    setTimeout(() => { $status.textContent = ''; }, 2400);
+  }
+
+  // --- Autosave (localStorage) ---
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) { $doc.innerHTML = saved; flash('Edições restauradas ✓'); }
+  } catch(e) {}
+
+  let saveTimer = null;
+  $doc.addEventListener('input', () => {
+    $status.textContent = 'editando…';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, $doc.innerHTML);
+        const t = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+        $status.textContent = 'salvo · ' + t;
+      } catch(e) { $status.textContent = 'erro ao salvar'; }
+    }, 600);
+  });
+
+  // Lightweight HTML → Markdown converter, tailored to this document's structure.
+  function toMarkdown(root) {
+    const lines = [];
+    function inline(node) {
+      let out = '';
+      node.childNodes.forEach(n => {
+        if (n.nodeType === 3) { out += n.textContent; return; }
+        const tag = n.tagName ? n.tagName.toLowerCase() : '';
+        const txt = inline(n);
+        if (tag === 'strong' || tag === 'b') out += '**' + txt + '**';
+        else if (tag === 'em' || tag === 'i') out += '*' + txt + '*';
+        else if (tag === 'code') out += '`' + txt + '`';
+        else if (tag === 'br') out += '\n';
+        else out += txt;
+      });
+      return out;
+    }
+    function walk(node) {
+      node.childNodes.forEach(n => {
+        if (n.nodeType === 3) {
+          const t = n.textContent.trim();
+          if (t) lines.push(t);
+          return;
+        }
+        if (n.nodeType !== 1) return;
+        const tag = n.tagName.toLowerCase();
+        if (tag === 'h2') { lines.push('', '## ' + inline(n).replace(/\s+/g, ' ').trim(), ''); return; }
+        if (tag === 'h3') { lines.push('', '### ' + inline(n).replace(/\s+/g, ' ').trim(), ''); return; }
+        if (tag === 'p')  { lines.push(inline(n).trim(), ''); return; }
+        if (tag === 'blockquote') {
+          inline(n).split('\n').forEach(l => lines.push('> ' + l.trim()));
+          lines.push(''); return;
+        }
+        if (tag === 'ul') {
+          n.querySelectorAll(':scope > li').forEach(li => lines.push('- ' + inline(li).trim()));
+          lines.push(''); return;
+        }
+        if (tag === 'ol') {
+          let i = 1;
+          n.querySelectorAll(':scope > li').forEach(li => { lines.push(i + '. ' + inline(li).trim()); i++; });
+          lines.push(''); return;
+        }
+        if (tag === 'table') {
+          const rows = n.querySelectorAll('tr');
+          rows.forEach((tr, idx) => {
+            const cells = tr.querySelectorAll('th,td');
+            const cols = Array.from(cells).map(c => inline(c).trim().replace(/\|/g,'\\|'));
+            lines.push('| ' + cols.join(' | ') + ' |');
+            if (idx === 0) lines.push('|' + cols.map(()=>'---').join('|') + '|');
+          });
+          lines.push(''); return;
+        }
+        if (tag === 'hr') { lines.push('', '---', ''); return; }
+        if (tag === 'div') { walk(n); return; }
+        // fallback
+        walk(n);
+      });
+    }
+    walk(root);
+    return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+  }
+
+  document.getElementById('btn-copy').addEventListener('click', async () => {
+    const md = toMarkdown($doc);
+    try {
+      await navigator.clipboard.writeText(md);
+      flash('Copiado como Markdown ✓');
+    } catch(e) {
+      flash('Erro ao copiar — use Baixar .md');
+    }
+  });
+
+  document.getElementById('btn-download').addEventListener('click', () => {
+    const md = toMarkdown($doc);
+    const blob = new Blob([md], {type: 'text/markdown;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Roteiro Aula 1h C.A.R.E. 360 (revisado).md';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    flash('Download iniciado ✓');
+  });
+
+  document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+  document.getElementById('btn-download-html').addEventListener('click', () => {
+    const clone = document.documentElement.cloneNode(true);
+    // remove toolbar e script para versão "limpa" portável
+    clone.querySelectorAll('.toolbar, script').forEach(el => el.remove());
+    const html = '<!doctype html>\n' + clone.outerHTML;
+    const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Roteiro Aula 1h C.A.R.E. 360 (editado).html';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    flash('HTML baixado ✓');
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    if (!confirm('Descartar todas as edições salvas neste navegador?')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    $doc.innerHTML = ORIGINAL_HTML;
+    flash('Resetado ✓');
+  });
+})();
+</script>
+</body>
+</html>

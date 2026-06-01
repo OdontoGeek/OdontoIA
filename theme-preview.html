@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OdontoIA — Theme Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0F1113;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 40px 24px;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .page-header h1 {
+    color: #FAFAFA;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .page-header p {
+    color: #6B7280;
+    font-size: 14px;
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .themes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .theme-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .theme-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 0;
+    border-bottom: 1px solid;
+  }
+
+  /* ── VERSÃO 1: OdontoIA Teal (sugestão Claude) ── */
+  .v1 .theme-label {
+    color: #2DD4BF;
+    border-color: #2DD4BF40;
+  }
+
+  .terminal-v1 {
+    background: #0D1117;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #21262D;
+    font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .titlebar-v1 {
+    background: #161B22;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #21262D;
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #FF5F57; }
+  .dot-yellow { background: #FFBD2E; }
+  .dot-green { background: #28C840; }
+
+  .titlebar-title {
+    color: #8B949E;
+    font-size: 12px;
+    margin-left: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .terminal-body-v1 {
+    padding: 20px;
+    min-height: 520px;
+  }
+
+  /* prompt do usuário */
+  .prompt-v1 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .prompt-icon-v1 {
+    width: 20px;
+    height: 20px;
+    background: #2DD4BF20;
+    border: 1px solid #2DD4BF60;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .prompt-icon-v1 span {
+    font-size: 9px;
+    color: #2DD4BF;
+    font-weight: 700;
+  }
+
+  .prompt-text-v1 {
+    color: #E6EDF3;
+    font-size: 13px;
+  }
+
+  /* resposta claude */
+  .response-v1 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .response-icon-v1 {
+    width: 20px;
+    height: 20px;
+    background: #388BFD20;
+    border: 1px solid #388BFD60;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .response-icon-v1 span {
+    font-size: 9px;
+    color: #388BFD;
+    font-weight: 700;
+  }
+
+  .response-body-v1 { flex: 1; }
+
+  .response-text-v1 {
+    color: #CDD9E5;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .code-block-v1 {
+    background: #161B22;
+    border: 1px solid #21262D;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
+  .code-comment-v1 { color: #8B949E; }
+  .code-key-v1     { color: #2DD4BF; }
+  .code-val-v1     { color: #79C0FF; }
+  .code-str-v1     { color: #A5D6FF; }
+  .code-acc-v1     { color: #388BFD; }
+
+  .divider-v1 {
+    border: none;
+    border-top: 1px solid #21262D;
+    margin: 16px 0;
+  }
+
+  .status-bar-v1 {
+    background: #161B22;
+    border-top: 1px solid #21262D;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+
+  .status-left-v1  { color: #2DD4BF; }
+  .status-right-v1 { color: #8B949E; }
+
+  .input-area-v1 {
+    background: #161B22;
+    border-top: 1px solid #21262D;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .input-prompt-v1 {
+    color: #2DD4BF;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .input-field-v1 {
+    color: #E6EDF3;
+    font-size: 13px;
+    flex: 1;
+  }
+
+  .cursor-v1 {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: #2DD4BF;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── VERSÃO 2: OdontoIA Brand · Optimized (warm/cool contrast) ── */
+  .v2 .theme-label {
+    color: #E5D4C3;
+    border-color: #E5D4C340;
+  }
+
+  .terminal-v2 {
+    background: #0F2029;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #1F3A44;
+    font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .titlebar-v2 {
+    background: #1F3A44;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #2A4D5A;
+  }
+
+  .titlebar-title-v2 {
+    color: #E5D4C3;
+    font-size: 12px;
+    margin-left: 8px;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+  }
+
+  .terminal-body-v2 {
+    padding: 20px;
+    min-height: 520px;
+  }
+
+  .prompt-v2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .prompt-icon-v2 {
+    width: 20px;
+    height: 20px;
+    background: #5C7A8530;
+    border: 1px solid #7A9BA8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .prompt-icon-v2 span {
+    font-size: 9px;
+    color: #8FBDCC;
+    font-weight: 700;
+  }
+
+  .prompt-text-v2 {
+    color: #FAFAFA;
+    font-size: 13px;
+  }
+
+  .response-v2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  /* AI ícone — fundo Warm Nude + letra Petrol Deep */
+  .response-icon-v2 {
+    width: 20px;
+    height: 20px;
+    background: #E5D4C3;
+    border: 1px solid #E5D4C3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .response-icon-v2 span {
+    font-size: 9px;
+    color: #1F3A44;
+    font-weight: 700;
+  }
+
+  .response-body-v2 { flex: 1; }
+
+  .response-text-v2 {
+    color: #E5D4C3;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .code-block-v2 {
+    background: #0F2029;
+    border: 1px solid #2A4D5A;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+
+  .code-comment-v2 { color: #486470; }
+  .code-key-v2     { color: #8FBDCC; }
+  .code-val-v2     { color: #E5D4C3; }
+  .code-str-v2     { color: #FAFAFA; }
+  .code-acc-v2     { color: #D4B99A; }
+
+  .divider-v2 {
+    border: none;
+    border-top: 1px solid #2A4D5A;
+    margin: 16px 0;
+  }
+
+  .status-bar-v2 {
+    background: #1F3A44;
+    border-top: 1px solid #2A4D5A;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+
+  .status-left-v2  { color: #E5D4C3; }
+  .status-right-v2 { color: #5C7A85; }
+
+  .input-area-v2 {
+    background: #1F3A44;
+    border-top: 1px solid #2A4D5A;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .input-prompt-v2 {
+    color: #7A9BA8;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .input-field-v2 {
+    color: #FAFAFA;
+    font-size: 13px;
+    flex: 1;
+  }
+
+  .cursor-v2 {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: #E5D4C3;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* paleta chips */
+  .palette-strip {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .chip-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .chip-v1 { color: #8B949E; }
+  .chip-v2 { color: #5C7A85; }
+
+  @media (max-width: 800px) {
+    .themes-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>OdontoIA — Theme Preview</h1>
+  <p>Comparativo visual · Versão A (Claude Teal) vs Versão B (Brand Book · Optimized)</p>
+</div>
+
+<div class="themes-grid">
+
+  <!-- ═══════════════════════════════════════ VERSÃO A -->
+  <div class="theme-column v1">
+    <div class="theme-label">Versão A — OdontoIA Teal (sugestão Claude)</div>
+
+    <div class="palette-strip">
+      <div class="chip chip-v1"><div class="chip-swatch" style="background:#0D1117;border:1px solid #333;"></div>#0D1117</div>
+      <div class="chip chip-v1"><div class="chip-swatch" style="background:#2DD4BF;"></div>#2DD4BF</div>
+      <div class="chip chip-v1"><div class="chip-swatch" style="background:#388BFD;"></div>#388BFD</div>
+      <div class="chip chip-v1"><div class="chip-swatch" style="background:#E6EDF3;"></div>#E6EDF3</div>
+    </div>
+
+    <div class="terminal-v1">
+      <div class="titlebar-v1">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="titlebar-title">claude — OdontoIA</div>
+      </div>
+
+      <div class="terminal-body-v1">
+
+        <div class="prompt-v1">
+          <div class="prompt-icon-v1"><span>FS</span></div>
+          <div class="prompt-text-v1">qual protocolo de fotopolimerização para resina bulk fill?</div>
+        </div>
+
+        <div class="response-v1">
+          <div class="response-icon-v1"><span>AI</span></div>
+          <div class="response-body-v1">
+            <div class="response-text-v1">Para resinas bulk fill a literatura recomenda:</div>
+            <div class="code-block-v1">
+              <div><span class="code-comment-v1"># Protocolo base — incremento único até 4mm</span></div>
+              <div><span class="code-key-v1">intensidade</span>  <span class="code-val-v1">&gt;= 1000 mW/cm²</span></div>
+              <div><span class="code-key-v1">tempo</span>       <span class="code-val-v1">20s</span>  <span class="code-comment-v1"># mínimo por face</span></div>
+              <div><span class="code-key-v1">distância</span>   <span class="code-val-v1">&lt; 2mm</span>  <span class="code-comment-v1"># da ponta ao material</span></div>
+              <div><span class="code-key-v1">modo</span>        <span class="code-str-v1">"ramp"</span>  <span class="code-comment-v1"># reduz stress de contração</span></div>
+            </div>
+            <div class="response-text-v1" style="margin-top:10px;">
+              Referência: <span class="code-acc-v1">Rullmann et al. 2023 · JERD</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider-v1">
+
+        <div class="prompt-v1">
+          <div class="prompt-icon-v1"><span>FS</span></div>
+          <div class="prompt-text-v1">cria slide sobre isso para a aula Care360</div>
+        </div>
+
+        <div class="response-v1">
+          <div class="response-icon-v1"><span>AI</span></div>
+          <div class="response-body-v1">
+            <div class="response-text-v1">Gerando slide com layout Care360...</div>
+            <div class="code-block-v1">
+              <div><span class="code-comment-v1">✓ aula-care360-bulk-fill.html criado</span></div>
+              <div><span class="code-key-v1">tokens</span>  <span class="code-val-v1">1.2k</span></div>
+              <div><span class="code-key-v1">custo</span>   <span class="code-val-v1">$0.004</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="status-bar-v1">
+        <span class="status-left-v1">● OdontoIA · main</span>
+        <span class="status-right-v1">claude-sonnet-4-6 · auto</span>
+      </div>
+
+      <div class="input-area-v1">
+        <span class="input-prompt-v1">❯</span>
+        <span class="input-field-v1"><span class="cursor-v1"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ VERSÃO B -->
+  <div class="theme-column v2">
+    <div class="theme-label">Versão B — OdontoIA Brand · Optimized</div>
+
+    <div class="palette-strip">
+      <div class="chip chip-v2"><div class="chip-swatch" style="background:#0F2029;border:1px solid #1F3A44;"></div>BG</div>
+      <div class="chip chip-v2"><div class="chip-swatch" style="background:#1F3A44;"></div>Surface</div>
+      <div class="chip chip-v2"><div class="chip-swatch" style="background:#8FBDCC;border:1px solid #7A9BA8;"></div>FS (frio)</div>
+      <div class="chip chip-v2"><div class="chip-swatch" style="background:#1F3A44;border:1px solid #2A4D5A;"></div>AI sólido</div>
+    </div>
+
+    <div class="terminal-v2">
+      <div class="titlebar-v2">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="titlebar-title-v2">claude — OdontoIA</div>
+      </div>
+
+      <div class="terminal-body-v2">
+
+        <div class="prompt-v2">
+          <div class="prompt-icon-v2"><span>FS</span></div>
+          <div class="prompt-text-v2">qual protocolo de fotopolimerização para resina bulk fill?</div>
+        </div>
+
+        <div class="response-v2">
+          <div class="response-icon-v2"><span>AI</span></div>
+          <div class="response-body-v2">
+            <div class="response-text-v2">Para resinas bulk fill a literatura recomenda:</div>
+            <div class="code-block-v2">
+              <div><span class="code-comment-v2"># Protocolo base — incremento único até 4mm</span></div>
+              <div><span class="code-key-v2">intensidade</span>  <span class="code-val-v2">&gt;= 1000 mW/cm²</span></div>
+              <div><span class="code-key-v2">tempo</span>       <span class="code-val-v2">20s</span>  <span class="code-comment-v2"># mínimo por face</span></div>
+              <div><span class="code-key-v2">distância</span>   <span class="code-val-v2">&lt; 2mm</span>  <span class="code-comment-v2"># da ponta ao material</span></div>
+              <div><span class="code-key-v2">modo</span>        <span class="code-str-v2">"ramp"</span>  <span class="code-comment-v2"># reduz stress de contração</span></div>
+            </div>
+            <div class="response-text-v2" style="margin-top:10px;">
+              Referência: <span class="code-acc-v2">Rullmann et al. 2023 · JERD</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider-v2">
+
+        <div class="prompt-v2">
+          <div class="prompt-icon-v2"><span>FS</span></div>
+          <div class="prompt-text-v2">cria slide sobre isso para a aula Care360</div>
+        </div>
+
+        <div class="response-v2">
+          <div class="response-icon-v2"><span>AI</span></div>
+          <div class="response-body-v2">
+            <div class="response-text-v2">Gerando slide com layout Care360...</div>
+            <div class="code-block-v2">
+              <div><span class="code-comment-v2">✓ aula-care360-bulk-fill.html criado</span></div>
+              <div><span class="code-key-v2">tokens</span>  <span class="code-val-v2">1.2k</span></div>
+              <div><span class="code-key-v2">custo</span>   <span class="code-val-v2">$0.004</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="status-bar-v2">
+        <span class="status-left-v2">● OdontoIA · main</span>
+        <span class="status-right-v2">claude-sonnet-4-6 · auto</span>
+      </div>
+
+      <div class="input-area-v2">
+        <span class="input-prompt-v2">❯</span>
+        <span class="input-field-v2"><span class="cursor-v2"></span></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
